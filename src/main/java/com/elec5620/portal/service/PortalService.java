@@ -25,21 +25,27 @@ public class PortalService {
         this.questionRepository = questionRepository;
     }
 
-    public ResponseEntity<DTO> GenerateSyllabus(String input) {
+    public String GenerateSyllabus(String input) {
+        return input;
     }
 
-    public ResponseEntity<DTO> DetectingPlagiarism(String input) {
+    public String DetectingPlagiarism(String input) {
+        return input;
     }
 
-    public ResponseEntity<DTO> AssessAssignment(String input) {
+    public String AssessAssignment(String input) {
+        return input;
     }
 
-    public ResponseEntity<DTO> MockExam(String input) {
+    public String MockExam(String input) {
+        return input;
     }
 
-    public ResponseEntity<DTO> UpdatingLearningResource(String input) {
+    public String UpdatingLearningResource(String input) {
+        return input;
     }
 
-    public ResponseEntity<DTO> OptimizeAlgorithm(String input) {
+    public String OptimizeAlgorithm(String input) {
+        return input;
     }
 }

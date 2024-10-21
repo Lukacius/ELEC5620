@@ -17,33 +17,33 @@ public class PortalController {
     }
 
     @PostMapping("/GenerateSyllabus")
-    public ResponseEntity<DTO> GenerateSyllabus(@RequestBody UserRequest request) {
-        portalService.GenerateSyllabus(request.userInput);
+    public String GenerateSyllabus(@RequestBody UserRequest request) {
+        return portalService.GenerateSyllabus(request.userInput);
     }
 
     @PostMapping("/DetectingPlagiarism")
-    public ResponseEntity<DTO> DetectingPlagiarism(@RequestBody UserRequest request) {
-        portalService.DetectingPlagiarism(request.userInput);
+    public String DetectingPlagiarism(@RequestBody UserRequest request) {
+        return portalService.DetectingPlagiarism(request.userInput);
     }
 
     @PostMapping("/AssessAssignment")
-    public ResponseEntity<DTO> AssessAssignment(@RequestBody UserRequest request) {
-        portalService.AssessAssignment(request.userInput);
+    public String AssessAssignment(@RequestBody UserRequest request) {
+        return portalService.AssessAssignment(request.userInput);
     }
 
     @PostMapping("/MockExam")
-    public ResponseEntity<DTO> MockExam(@RequestBody UserRequest request) {
-        portalService.MockExam(request.userInput);
+    public String MockExam(@RequestBody UserRequest request) {
+        return portalService.MockExam(request.userInput);
     }
 
     @PostMapping("/UpdatingLearningResource")
-    public ResponseEntity<DTO> UpdatingLearningResource(@RequestBody UserRequest request) {
-        portalService.UpdatingLearningResource(request.userInput);
+    public String UpdatingLearningResource(@RequestBody UserRequest request) {
+        return portalService.UpdatingLearningResource(request.userInput);
     }
 
     @PostMapping("/OptimizeAlgorithm")
-    public ResponseEntity<DTO> OptimizeAlgorithm(@RequestBody UserRequest request) {
-        portalService.OptimizeAlgorithm(request.userInput);
+    public String OptimizeAlgorithm(@RequestBody UserRequest request) {
+        return portalService.OptimizeAlgorithm(request.userInput);
     }
 
     public static class UserRequest {

@@ -1,9 +1,6 @@
 package com.elec5620.portal.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +22,10 @@ public class Question {
 
     @JoinColumn(nullable = false)
     String difficultyLevel;
+
+    @ManyToOne
+    @JoinColumn(name = "assessment_id")
+    private Assessment assessment;
 
     public Question(String type, int amount, String difficultyLevel) {
         this.type = type;
