@@ -19,13 +19,26 @@ public class AIService {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     public String getAIResponse(String prompt) {
+        return getAIResponse("user", prompt);
+    }
+
+    public String setAISystem(String prompt) {
+        return getAIResponse("system", prompt);
+    }
+
+    public String getAITool(String prompt) {
+        return getAIResponse("tool", prompt);
+    }
+
+    private String getAIResponse(String role, String prompt) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
 
-        String requestBody = "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\"user\",\"content\":\"" + prompt + "\"}]}";
+        String requestBody = "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\""
+                             + role + "\",\"content\":\"" + prompt + "\"}]}";
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
