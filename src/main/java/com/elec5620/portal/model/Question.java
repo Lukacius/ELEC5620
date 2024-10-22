@@ -27,9 +27,10 @@ public class Question {
     @JoinColumn(name = "assessment_id")
     private Assessment assessment;
 
-    public Question(String type, int amount, String difficultyLevel) {
+    public Question(String type, int amount, String difficultyLevel, Assessment assessment) {
         this.type = type;
         this.amount = amount;
         this.difficultyLevel = difficultyLevel;
+        this.assessment = assessment;
     }
 }

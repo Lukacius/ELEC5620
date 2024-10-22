@@ -13,11 +13,13 @@ public class QuestionDTO {
     String type;
     int amount;
     String difficultyLevel;
+    AssessmentDTO assessment;
 
     public QuestionDTO(Question questionEntity) {
         this.id = questionEntity.getId();
         this.type = questionEntity.getType();
         this.amount = questionEntity.getAmount();
         this.difficultyLevel = questionEntity.getDifficultyLevel();
+        this.assessment = new AssessmentDTO(questionEntity.getAssessment());
     }
 }
