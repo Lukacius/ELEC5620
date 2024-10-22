@@ -1,6 +1,7 @@
 package com.elec5620.portal.service;
 
 import com.elec5620.portal.dto.UserDTO;
+import com.elec5620.portal.model.DifficultyLevel;
 import com.elec5620.portal.model.User;
 import com.elec5620.portal.repository.UserRepository;
 import com.elec5620.portal.util.JwtUtil;
@@ -38,6 +39,7 @@ public class UserService {
         user.setName(userDTO.getName());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));  // 加密密码
         user.setUserType(userDTO.getUserType());
+        user.setUserPrompt(userDTO.getUserPrompt());
         user.setDifficultyLevel(userDTO.getDifficultyLevel());
 
         userRepository.save(user);
@@ -53,4 +55,20 @@ public class UserService {
 
         return jwtUtil.generateToken(user.getEmail(), user.getUserType());
     }
+
+    //更新用户信息
+    public String updateUserInfoByEmail(String email,String userPrompt) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return "User doesn't exist!";
+        }
+
+        user.setUserPrompt(userPrompt);
+
+        userRepository.save(user);
+
+        return "Update successful!";
+
+    }
+
 }

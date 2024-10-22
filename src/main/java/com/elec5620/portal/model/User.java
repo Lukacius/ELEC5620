@@ -29,6 +29,9 @@ public class User {
     @Column(nullable = false)
     private String userType;
 
+    @Column
+    private String userPrompt;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DifficultyLevel difficultyLevel;

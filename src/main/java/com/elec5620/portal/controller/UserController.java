@@ -1,18 +1,19 @@
 package com.elec5620.portal.controller;
 
 import com.elec5620.portal.dto.UserDTO;
+import com.elec5620.portal.model.DifficultyLevel;
+import com.elec5620.portal.model.User;
+import com.elec5620.portal.repository.UserRepository;
 import com.elec5620.portal.service.UserService;
 import com.elec5620.portal.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * ClassName: UserController
@@ -29,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
@@ -47,14 +51,23 @@ public class UserController {
                     .body(Map.of("message", "Invalid credentials"));
         }
 
+        User user = (User)userRepository.findByEmail(email).orElse(null);
+
         // 解析Token以获取Token类型
         Claims claims = new JwtUtil().validateToken(token);
         String tokenType = claims.get("tokenType", String.class);
 
         return ResponseEntity.ok(Map.of(
                 "token", token,
+                "name", user.getName(),
                 "tokenType", tokenType,
                 "message", "Login successful"
         ));
     }
+
+    @PostMapping("/update/{email}")
+    public ResponseEntity<String> updateUserInfoByEmail(@PathVariable String email, @RequestBody String userPrompt) {
+        return ResponseEntity.ok(userService.updateUserInfoByEmail(email,userPrompt));
+    }
+
 }
