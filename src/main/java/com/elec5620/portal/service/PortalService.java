@@ -15,37 +15,40 @@ public class PortalService {
     private final UserRepository userRepository;
     private final AssessmentRepository assessmentRepository;
     private final QuestionRepository questionRepository;
+    private final AIService aiService;
 
     @Autowired
     public PortalService(UserRepository userRepository,
                          AssessmentRepository assessmentRepository,
-                         QuestionRepository questionRepository) {
+                         QuestionRepository questionRepository,
+                         AIService aiService) {
         this.userRepository = userRepository;
         this.assessmentRepository = assessmentRepository;
         this.questionRepository = questionRepository;
+        this.aiService = aiService;
     }
 
     public String GenerateSyllabus(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 
     public String DetectingPlagiarism(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 
     public String AssessAssignment(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 
     public String MockExam(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 
     public String UpdatingLearningResource(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 
     public String OptimizeAlgorithm(String input) {
-        return input;
+        return aiService.getAIResponse(input);
     }
 }

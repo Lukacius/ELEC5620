@@ -1,6 +1,7 @@
 package com.elec5620.portal.controller;
 
 import com.elec5620.portal.service.PortalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PortalController {
     private final PortalService portalService;
 
+    @Autowired
     public PortalController(PortalService portalService) {
         this.portalService = portalService;
     }
