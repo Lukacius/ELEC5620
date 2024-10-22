@@ -1,6 +1,7 @@
 package com.elec5620.portal.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,32 +9,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "app_user")
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @JoinColumn(nullable = false)
-    String userName;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @JoinColumn(nullable = false)
-    String emailAddress;
+    @Column(nullable = false)
+    private String name;
 
-    @JoinColumn(nullable = false)
-    String userType;
+    @Column(nullable = false)
+    private String password;
 
-    @JoinColumn(nullable = false)
-    String userDescription;
+    @Column(nullable = false)
+    private String userType;
 
-    String academicLevel;
-
-    public User(String userName, String emailAddress, String userType, String userDescription, String academicLevel) {
-        this.userName = userName;
-        this.emailAddress = emailAddress;
-        this.userType = userType;
-        this.userDescription = userDescription;
-        this.academicLevel = academicLevel;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DifficultyLevel difficultyLevel;
 }
