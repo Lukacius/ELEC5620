@@ -37,7 +37,10 @@ public class PortalController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
-        String userPrompt = user.getUserPrompt().trim();
+        String userPrompt = "";
+        if (user.getUserPrompt() != null) {
+            userPrompt = user.getUserPrompt().trim();
+        }
 
         String difficultySettings = switch(user.getDifficultyLevel()) {
             case EASY -> {
@@ -74,7 +77,10 @@ public class PortalController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
-        String userPrompt = user.getUserPrompt().trim();
+        String userPrompt = "";
+        if (user.getUserPrompt() != null) {
+            userPrompt = user.getUserPrompt().trim();
+        }
 
         String difficultySettings = switch(user.getDifficultyLevel()) {
             case EASY -> {
@@ -111,7 +117,10 @@ public class PortalController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
-        String userPrompt = user.getUserPrompt().trim();
+        String userPrompt = "";
+        if (user.getUserPrompt() != null) {
+            userPrompt = user.getUserPrompt().trim();
+        }
 
         String difficultySettings = switch(user.getDifficultyLevel()) {
             case EASY -> {
@@ -147,7 +156,10 @@ public class PortalController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
-        String userPrompt = user.getUserPrompt().trim();
+        String userPrompt = "";
+        if (user.getUserPrompt() != null) {
+            userPrompt = user.getUserPrompt().trim();
+        }
 
         String difficultySettings = switch(user.getDifficultyLevel()) {
             case EASY -> {
@@ -183,7 +195,10 @@ public class PortalController {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
-        String userPrompt = user.getUserPrompt().trim();
+        String userPrompt = "";
+        if (user.getUserPrompt() != null) {
+            userPrompt = user.getUserPrompt().trim();
+        }
 
         String difficultySettings = "Analyze my historical study data and provide comprehensive feedback on my learning progress. Based on my study dates, duration, topics, scores, and self-reported challenges, identify key areas where I’m improving, as well as specific concepts that may need further review. Summarize trends in my study habits, such as consistency in time spent or progress in understanding. Offer practical suggestions for areas needing improvement and suggest study strategies that could help me address recurring difficulties. Provide feedback that helps me better structure my study sessions and improve my overall learning effectiveness.";
 
