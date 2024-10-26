@@ -7,9 +7,16 @@ import com.elec5620.portal.service.OllamaService;
 import com.elec5620.portal.service.PortalService;
 import com.elec5620.portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -25,6 +32,8 @@ public class PortalController {
 
     @Autowired
     private final AIService aiService;
+
+    private static final String UPLOAD_DIRECTORY = "./";
 
     @Autowired
     public PortalController(PortalService portalService,AIService aiService) {
@@ -205,34 +214,160 @@ public class PortalController {
     }
 
 
-    @PostMapping("/GenerateSyllabus")
-    public String GenerateSyllabus(@RequestBody UserRequest request) {
-        return portalService.GenerateSyllabus(request.userInput);
+    @PostMapping("/GenerateSyllabus/{email}")
+    public String GenerateSyllabus(@PathVariable String email, @RequestBody UserRequest request) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        //complete prompt setting
+        String userPrompt = user.getUserPrompt().trim();
+
+        String difficultySettings = switch(user.getDifficultyLevel()) {
+            case EASY -> {
+                yield "Create a beginner-friendly syllabus outline for an introductory course. The syllabus should cover foundational concepts in the subject, broken down into simple, manageable weekly topics. Include basic learning objectives, recommended readings, and key activities or assessments that reinforce understanding of each topic. Keep the syllabus structure straightforward, with a focus on building a solid understanding of core ideas. Ensure that the outline is accessible and engaging for learners new to the subject, helping them gradually gain confidence and knowledge in a supportive learning environment.";
+            }
+            case MEDIUM -> {
+                yield "Create a syllabus outline for an intermediate course, designed for students with some prior knowledge of the subject. Include weekly or unit-based topics that build on foundational concepts and introduce more complex ideas. Define specific learning objectives, list required readings, and suggest activities or assessments that encourage deeper engagement, such as group projects or analytical assignments. Ensure that each topic is structured to challenge students and expand their understanding, with an emphasis on critical thinking and application. Provide a timeline that guides progression and prepares students for more advanced study in the subject.";
+            }
+            case HARD -> {
+                yield "Create a detailed syllabus outline for an advanced-level course intended for students with strong foundational knowledge in the subject. Organize the syllabus around in-depth, complex topics and specialized areas, outlining comprehensive weekly or module-based learning objectives. Include advanced readings, research articles, or case studies, and design rigorous assessments such as research projects, presentations, or critical essays. Each week’s topics should challenge students to critically analyze, synthesize, and apply concepts, preparing them for expert-level understanding. Provide a well-structured timeline and clear criteria for each component to help students manage the course demands and deepen their mastery.";
+            }
+        };
+
+        //prompt concat
+        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
+
+        System.out.println(request.userInput);
+        System.out.println(request.model);
+
+        //judge model, select AI service
+        if ("ollama".equalsIgnoreCase(request.model)) {
+            //invoke local Ollama model API
+            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
+        } else if ("openai".equalsIgnoreCase(request.model)) {
+            return portalService.GenerateSyllabus(request.userInput);
+        }
+
+        return "model doesn't exist";
     }
 
-    @PostMapping("/DetectingPlagiarism")
-    public String DetectingPlagiarism(@RequestBody UserRequest request) {
-        return portalService.DetectingPlagiarism(request.userInput);
+    @PostMapping("/DetectingPlagiarism/{email}")
+    public String DetectingPlagiarism(@PathVariable String email, @RequestBody UserRequest request) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        //complete prompt setting
+        String userPrompt = user.getUserPrompt().trim();
+
+        String difficultySettings = "Analyze the input content to detect potential signs of AI generation or plagiarism. Look for common indicators such as repetitive phrasing, overly consistent structure, lack of context-specific examples, or unnatural syntax patterns. Compare the text against known AI generation styles and check for uniqueness by cross-referencing with accessible databases or sources if possible. Provide a summary of detected AI-generated characteristics, if any, and indicate the likelihood of originality. Offer feedback on specific areas of the text that may need human revision for improved authenticity and originality.";
+
+        //prompt concat
+        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
+
+        System.out.println(request.userInput);
+        System.out.println(request.model);
+
+        //judge model, select AI service
+        if ("ollama".equalsIgnoreCase(request.model)) {
+            //invoke local Ollama model API
+            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
+        } else if ("openai".equalsIgnoreCase(request.model)) {
+            return portalService.DetectingPlagiarism(request.userInput);
+        }
+
+        return "model doesn't exist";
     }
 
-    @PostMapping("/AssessAssignment")
-    public String AssessAssignment(@RequestBody UserRequest request) {
-        return portalService.AssessAssignment(request.userInput);
+    @PostMapping("/AssessAssignment/{email}")
+    public String AssessAssignment(@PathVariable String email, @RequestBody UserRequest request) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        //complete prompt setting
+        String userPrompt = user.getUserPrompt().trim();
+
+        String difficultySettings = switch(user.getDifficultyLevel()) {
+            case EASY -> {
+                yield "Assist in assessing beginner-level assignments, focusing on basic comprehension, clarity, and correctness. Review the student’s work for essential understanding of core concepts and identify any simple errors in grammar, spelling, or formatting. Provide positive, encouraging feedback and suggest one or two small improvements to enhance clarity and presentation. Keep feedback constructive and beginner-friendly, offering clear guidance to help students reinforce foundational skills.";
+            }
+            case MEDIUM -> {
+                yield "Assist in evaluating intermediate-level assignments, focusing on both content accuracy and presentation. Review the work for clarity of ideas, organization, and relevance to the assignment prompt, noting any areas where reasoning or evidence could be strengthened. Offer constructive criticism on grammar, structure, and vocabulary to improve flow and coherence. Suggest practical improvements for content depth and presentation, helping students transition from foundational skills to more developed, coherent expression. Ensure feedback is actionable and specific, with examples or brief explanations where useful.";
+            }
+            case HARD -> {
+                yield "Provide detailed assessment support for advanced-level assignments, focusing on the depth, originality, and critical thinking displayed in the work. Evaluate the quality of arguments, supporting evidence, and logical structure, highlighting strengths as well as areas for refinement. Offer in-depth, constructive feedback on advanced grammar, style, and precision of language, suggesting ways to improve clarity and persuasiveness. Identify areas where analysis, synthesis, or originality could be deepened, helping students achieve a higher level of academic rigor. Ensure that feedback is thorough, nuanced, and tailored to support advanced learning outcomes.";
+            }
+        };
+
+        //prompt concat
+        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
+
+        System.out.println(request.userInput);
+        System.out.println(request.model);
+
+        //judge model, select AI service
+        if ("ollama".equalsIgnoreCase(request.model)) {
+            //invoke local Ollama model API
+            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
+        } else if ("openai".equalsIgnoreCase(request.model)) {
+            return portalService.AssessAssignment(request.userInput);
+        }
+
+        return "model doesn't exist";
     }
 
-    @PostMapping("/MockExam")
-    public String MockExam(@RequestBody UserRequest request) {
-        return portalService.MockExam(request.userInput);
+    @PostMapping("/MockExam/{email}")
+    public String MockExam(@PathVariable String email, @RequestBody UserRequest request) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        //complete prompt setting
+        String userPrompt = user.getUserPrompt().trim();
+
+        String difficultySettings = switch(user.getDifficultyLevel()) {
+            case EASY -> {
+                yield "Generate a beginner-level mock exam designed to test fundamental concepts and basic understanding. Focus on simple, clear questions that assess core knowledge, using multiple-choice, true/false, and short-answer formats to ensure accessibility. Questions should be direct and straightforward, with minimal complexity, covering the essential topics of the course. Provide a balanced mix of question types that reinforce foundational skills, and ensure that each question is aligned with the primary learning objectives of the introductory material.";
+            }
+            case MEDIUM -> {
+                yield "Generate an intermediate-level mock exam aimed at assessing both foundational knowledge and application of concepts. Include a variety of question types, such as multiple-choice, short-answer, and scenario-based questions, that encourage students to think critically and apply their knowledge. Questions should cover a range of topics within the course, with some requiring multi-step reasoning or brief analysis. Ensure each question tests understanding of key concepts while challenging students to demonstrate comprehension beyond memorization, and provide clear instructions for each question type.";
+            }
+            case HARD -> {
+                yield "Generate an advanced-level mock exam intended to evaluate deep understanding, critical analysis, and synthesis of complex topics. Design questions that require in-depth responses, including essay prompts, case analyses, and multi-part problems that test students’ mastery of the subject. The exam should include challenging, open-ended questions that encourage students to integrate knowledge, provide evidence-based reasoning, and demonstrate advanced analytical skills. Ensure that each question is structured to assess nuanced understanding and critical thinking, suitable for students with strong command over the subject matter.";
+            }
+        };
+
+        //prompt concat
+        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
+
+        System.out.println(request.userInput);
+        System.out.println(request.model);
+
+        //judge model, select AI service
+        if ("ollama".equalsIgnoreCase(request.model)) {
+            //invoke local Ollama model API
+            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
+        } else if ("openai".equalsIgnoreCase(request.model)) {
+            return portalService.MockExam(request.userInput);
+        }
+
+        return "model doesn't exist";
     }
 
-    @PostMapping("/UpdatingLearningResource")
-    public String UpdatingLearningResource(@RequestBody UserRequest request) {
-        return portalService.UpdatingLearningResource(request.userInput);
-    }
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File is empty");
+        }
 
-    @PostMapping("/OptimizeAlgorithm")
-    public String OptimizeAlgorithm(@RequestBody UserRequest request) {
-        return portalService.OptimizeAlgorithm(request.userInput);
+        try {
+            File directory = new File(UPLOAD_DIRECTORY);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            Path path = Paths.get(UPLOAD_DIRECTORY + file.getOriginalFilename());
+            Files.write(path, file.getBytes());
+
+            return ResponseEntity.ok("File upload successful: " + path.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed: " + e.getMessage());
+        }
     }
 
     public static class UserRequest {
