@@ -2,10 +2,7 @@ package com.elec5620.portal.controller;
 
 import com.elec5620.portal.model.User;
 import com.elec5620.portal.repository.UserRepository;
-import com.elec5620.portal.service.AIService;
-import com.elec5620.portal.service.OllamaService;
-import com.elec5620.portal.service.PortalService;
-import com.elec5620.portal.service.UserService;
+import com.elec5620.portal.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +30,16 @@ public class PortalController {
     @Autowired
     private final AIService aiService;
 
+    @Autowired
+    private final BookService bookService;
+
     private static final String UPLOAD_DIRECTORY = "./";
 
     @Autowired
-    public PortalController(PortalService portalService,AIService aiService) {
+    public PortalController(PortalService portalService, AIService aiService, BookService bookService) {
         this.portalService = portalService;
         this.aiService = aiService;
+        this.bookService = bookService;
     }
 
     @PostMapping("/LanguageTutor/{email}")
@@ -160,7 +161,7 @@ public class PortalController {
         return "model doesn't exist";
     }
 
-    @PostMapping("/AssessAssignment/{email}")
+    @PostMapping("/AssessAssignment/Student/{email}")
     public String AssessAssignmentStudent(@PathVariable String email, @RequestBody UserRequest request) {
         User user = userRepository.findByEmail(email).orElse(null);
 
@@ -291,8 +292,8 @@ public class PortalController {
         return "model doesn't exist";
     }
 
-    @PostMapping("/AssessAssignment/{email}")
-    public String AssessAssignment(@PathVariable String email, @RequestBody UserRequest request) {
+    @PostMapping("/AssessAssignment/Teacher/{email}")
+    public String AssessAssignmentTeacher(@PathVariable String email, @RequestBody UserRequest request) {
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -377,6 +378,8 @@ public class PortalController {
 
             Path path = Paths.get(UPLOAD_DIRECTORY + file.getOriginalFilename());
             Files.write(path, file.getBytes());
+
+            BookService.saveCsvToDatabase(file);
 
             return ResponseEntity.ok("File upload successful: " + path.toString());
         } catch (IOException e) {

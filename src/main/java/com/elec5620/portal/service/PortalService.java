@@ -44,8 +44,6 @@ public class PortalService {
         return aiService.getAIResponse(input);
     }
 
-
-
     public String GenerateSyllabus(String input) {
         return aiService.getAIResponse(input);
     }
