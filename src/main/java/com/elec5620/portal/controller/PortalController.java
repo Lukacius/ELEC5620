@@ -30,6 +30,9 @@ public class PortalController {
     @Autowired
     private final AIService aiService;
 
+    @Autowired
+    private LangChainService langChainService;
+
     private BookService bookService;
 
     private static final String UPLOAD_DIRECTORY = "./";
@@ -63,22 +66,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.LanguageTutor(request.userInput);
-        }
-
-        return "model doesn't exist";
-
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/FurtherReadings/{email}")
@@ -103,22 +91,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.LanguageTutor(request.userInput);
-        }
-
-        return "model doesn't exist";
-
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/AfterClassExercise/{email}")
@@ -143,21 +116,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.LanguageTutor(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/AssessAssignment/Student/{email}")
@@ -182,21 +141,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.LanguageTutor(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/LearningFeedback/{email}")
@@ -211,21 +156,7 @@ public class PortalController {
 
         String difficultySettings = "Analyze my historical study data and provide comprehensive feedback on my learning progress. Based on my study dates, duration, topics, scores, and self-reported challenges, identify key areas where I’m improving, as well as specific concepts that may need further review. Summarize trends in my study habits, such as consistency in time spent or progress in understanding. Offer practical suggestions for areas needing improvement and suggest study strategies that could help me address recurring difficulties. Provide feedback that helps me better structure my study sessions and improve my overall learning effectiveness.";
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.LanguageTutor(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
 
@@ -248,21 +179,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.GenerateSyllabus(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/DetectingPlagiarism/{email}")
@@ -274,21 +191,7 @@ public class PortalController {
 
         String difficultySettings = "Analyze the input content to detect potential signs of AI generation or plagiarism. Look for common indicators such as repetitive phrasing, overly consistent structure, lack of context-specific examples, or unnatural syntax patterns. Compare the text against known AI generation styles and check for uniqueness by cross-referencing with accessible databases or sources if possible. Provide a summary of detected AI-generated characteristics, if any, and indicate the likelihood of originality. Offer feedback on specific areas of the text that may need human revision for improved authenticity and originality.";
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.DetectingPlagiarism(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/AssessAssignment/Teacher/{email}")
@@ -310,21 +213,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.AssessAssignment(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/MockExam/{email}")
@@ -346,21 +235,7 @@ public class PortalController {
             }
         };
 
-        //prompt concat
-        request.userInput =  userPrompt + " and " +difficultySettings + " and " + request.userInput;
-
-        System.out.println(request.userInput);
-        System.out.println(request.model);
-
-        //judge model, select AI service
-        if ("ollama".equalsIgnoreCase(request.model)) {
-            //invoke local Ollama model API
-            return ollamaService.callOllamaAPI(request.userInput,"llama3.2:latest");
-        } else if ("openai".equalsIgnoreCase(request.model)) {
-            return portalService.MockExam(request.userInput);
-        }
-
-        return "model doesn't exist";
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
     @PostMapping("/upload")
@@ -390,5 +265,6 @@ public class PortalController {
     public static class UserRequest {
         public String userInput;
         public String model;
+        public String session;
     }
 }
