@@ -38,7 +38,7 @@ public class AIService {
         headers.set("Content-Type", "application/json");
 
         String requestBody = "{\"model\":\"gpt-4o-mini\",\"messages\":[{\"role\":\""
-                             + role + "\",\"content\":\"" + prompt + "\"}]}";
+                + role + "\",\"content\":\"" + prompt + "\"}]}";
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
