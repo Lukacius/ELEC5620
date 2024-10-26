@@ -24,6 +24,28 @@ public class PortalService {
         this.aiService = aiService;
     }
 
+    public String LanguageTutor(String input){
+        return aiService.getAIResponse(input);
+    }
+
+    public String FurtherReadings(String input){
+        return aiService.getAIResponse(input);
+    }
+
+    public String AfterClassExercise(String input){
+        return aiService.getAIResponse(input);
+    }
+
+    public String AssessAssignmentStudent(String input){
+        return aiService.getAIResponse(input);
+    }
+
+    public String LearningFeedback(String input){
+        return aiService.getAIResponse(input);
+    }
+
+
+
     public String GenerateSyllabus(String input) {
         return aiService.getAIResponse(input);
     }
