@@ -6,6 +6,7 @@ import com.elec5620.portal.model.User;
 import com.elec5620.portal.repository.UserRepository;
 import com.elec5620.portal.service.UserService;
 import com.elec5620.portal.util.JwtUtil;
+import org.json.JSONObject;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,7 +68,9 @@ public class UserController {
 
     @PostMapping("/update/{email}")
     public ResponseEntity<String> updateUserInfoByEmail(@PathVariable String email, @RequestBody String userPrompt) {
-        return ResponseEntity.ok(userService.updateUserInfoByEmail(email,userPrompt));
+        JSONObject jsonObject = new JSONObject(userPrompt);
+        String prompt = jsonObject.getString("prompt");
+        return ResponseEntity.ok(userService.updateUserInfoByEmail(email,prompt));
     }
 
 }

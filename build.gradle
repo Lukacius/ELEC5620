@@ -38,6 +38,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-core:5.8.5'
 	implementation 'com.google.code.gson:gson:2.10.1'  // 最新版本号
 	implementation 'com.opencsv:opencsv:5.5.2'
+	implementation 'org.json:json:20210307'
 }
 
 tasks.named('test') {
