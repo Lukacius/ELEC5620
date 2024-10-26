@@ -24,15 +24,12 @@ public class BookService {
     public static void saveCsvToDatabase(MultipartFile file) {
         try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
             String[] line;
-            List<Book> books = new ArrayList<>();
             reader.readNext();
 
             while ((line = reader.readNext()) != null) {
                 Book book = getBook(line);
-
-                books.add(book);
+                bookRepository.save(book);
             }
-            bookRepository.saveAll(books);
         } catch (Exception e) {
             e.printStackTrace();
         }

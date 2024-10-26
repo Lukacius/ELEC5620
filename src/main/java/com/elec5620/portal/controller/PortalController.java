@@ -30,8 +30,7 @@ public class PortalController {
     @Autowired
     private final AIService aiService;
 
-    @Autowired
-    private final BookService bookService;
+    private BookService bookService;
 
     private static final String UPLOAD_DIRECTORY = "./";
 
