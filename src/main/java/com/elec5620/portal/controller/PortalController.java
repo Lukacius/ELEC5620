@@ -119,7 +119,7 @@ public class PortalController {
         return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
-    @PostMapping("/AssessAssignment/Student/{email}")
+    @PostMapping("/AssessAssignmentStudent/{email}")
     public String AssessAssignmentStudent(@PathVariable String email, @RequestBody UserRequest request) {
         User user = userRepository.findByEmail(email).orElse(null);
 
@@ -194,7 +194,7 @@ public class PortalController {
         return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
     }
 
-    @PostMapping("/AssessAssignment/Teacher/{email}")
+    @PostMapping("/AssessAssignmentTeacher/{email}")
     public String AssessAssignmentTeacher(@PathVariable String email, @RequestBody UserRequest request) {
         User user = userRepository.findByEmail(email).orElse(null);
 
