@@ -1,6 +1,5 @@
 package com.elec5620.portal.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
@@ -13,9 +12,6 @@ import org.springframework.http.ResponseEntity;
 @Service
 public class LangChainService {
 
-    @Value("${openai.api.key}")
-    private String apiKey;
-
     private static final String API_URL = "http://localhost:5001/api/query";
 
     public String getAIResponse(String session, String model, String question, String prompt) {
@@ -24,10 +20,12 @@ public class LangChainService {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String requestBody = "{\"session_id\":\"" + session + "\"," +
-                             "{\"model_type\":\"" + model + "\"," +
-                             "{\"question\":\"" + question + "\"," +
-                             "{\"prompt\":\"" + prompt + "\"";
+        String requestBody = "{"
+                + "\"session_id\":\"" + session + "\","
+                + "\"model_type\":\"" + model + "\","
+                + "\"question\":\"" + question + "\","
+                + "\"prompt\":\"" + prompt + "\""
+                + "}";
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
