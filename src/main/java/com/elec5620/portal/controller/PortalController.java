@@ -46,6 +46,10 @@ public class PortalController {
 
     @PostMapping("/LanguageTutor/{email}")
     public String LanguageTutor(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -66,11 +70,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/FurtherReadings/{email}")
     public String FurtherReadings(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -91,11 +99,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/AfterClassExercise/{email}")
     public String AfterClassExercise(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -116,11 +128,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/AssessAssignment/Student/{email}")
     public String AssessAssignmentStudent(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -141,11 +157,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/LearningFeedback/{email}")
     public String LearningFeedback(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -156,12 +176,16 @@ public class PortalController {
 
         String difficultySettings = "Analyze my historical study data and provide comprehensive feedback on my learning progress. Based on my study dates, duration, topics, scores, and self-reported challenges, identify key areas where I’m improving, as well as specific concepts that may need further review. Summarize trends in my study habits, such as consistency in time spent or progress in understanding. Offer practical suggestions for areas needing improvement and suggest study strategies that could help me address recurring difficulties. Provide feedback that helps me better structure my study sessions and improve my overall learning effectiveness.";
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
 
     @PostMapping("/GenerateSyllabus/{email}")
     public String GenerateSyllabus(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -179,11 +203,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/DetectingPlagiarism/{email}")
     public String DetectingPlagiarism(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -191,11 +219,15 @@ public class PortalController {
 
         String difficultySettings = "Analyze the input content to detect potential signs of AI generation or plagiarism. Look for common indicators such as repetitive phrasing, overly consistent structure, lack of context-specific examples, or unnatural syntax patterns. Compare the text against known AI generation styles and check for uniqueness by cross-referencing with accessible databases or sources if possible. Provide a summary of detected AI-generated characteristics, if any, and indicate the likelihood of originality. Offer feedback on specific areas of the text that may need human revision for improved authenticity and originality.";
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/AssessAssignment/Teacher/{email}")
     public String AssessAssignmentTeacher(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -213,11 +245,15 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/MockExam/{email}")
     public String MockExam(@PathVariable String email, @RequestBody UserRequest request) {
+        if (request.newTalk) {
+            return langChainService.getAIResponse(request.session, request.model, request.userInput, "", true);
+        }
+
         User user = userRepository.findByEmail(email).orElse(null);
 
         //complete prompt setting
@@ -235,7 +271,7 @@ public class PortalController {
             }
         };
 
-        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings);
+        return langChainService.getAIResponse(request.session, request.model, request.userInput, userPrompt + " and " +difficultySettings, false);
     }
 
     @PostMapping("/upload")
@@ -266,5 +302,6 @@ public class PortalController {
         public String userInput;
         public String model;
         public String session;
+        public boolean newTalk;
     }
 }

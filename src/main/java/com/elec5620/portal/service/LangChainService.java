@@ -14,18 +14,27 @@ public class LangChainService {
 
     private static final String API_URL = "http://localhost:5001/api/query";
 
-    public String getAIResponse(String session, String model, String question, String prompt) {
+    public String getAIResponse(String session, String model, String question, String prompt, boolean initialized) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
-        String requestBody = "{"
-                + "\"session_id\":\"" + session + "\","
-                + "\"model_type\":\"" + model + "\","
-                + "\"question\":\"" + question + "\","
-                + "\"prompt\":\"" + prompt + "\""
-                + "}";
+        String requestBody;
+        if (!initialized) {
+            requestBody = "{"
+                    + "\"session_id\":\"" + session + "\","
+                    + "\"model_type\":\"" + model + "\","
+                    + "\"question\":\"" + question + "\","
+                    + "\"prompt\":\"" + prompt + "\""
+                    + "}";
+        } else {
+            requestBody = "{"
+                    + "\"session_id\":\"" + session + "\","
+                    + "\"model_type\":\"" + model + "\","
+                    + "\"question\":\"" + question + "\""
+                    + "}";
+        }
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
