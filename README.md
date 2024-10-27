@@ -1,6 +1,31 @@
 # ELEC5620
-This project is a backend system for the AI education system, and uses Springboot as the framework. It connects to AI models (openAI and ollama) and database (postgresDB)
+This project is a backend system for the AI education system, and uses Springboot as the framework. It connects to AI models (openAI and ollama) and database (postgreSql)
 
+# Bacnk-end(Port:8080)
+# Technology Stack
+    Java 21
+    PostgreSQL
+    Springboot 3.3.4
+    Gradle
+    Spring Data JPA
+# Back-end Setup
+  1.Clone the repository
+    git clone <repository-url>
+    cd backend
+    update application.properties(use your own postgreSql port and change your 'username','password')
+# Backend Structure
+
+```bash
+backend/
+└── src/main/java/com.elec5620.portal/
+    ├── config/         # handle crossOrigin
+    ├── controller/     # define API
+    ├── dto/            # data transfer object
+    ├── model/          # DB table structure
+    ├── repository/     # JpaRepository
+    └── util/           # util
+    
+    
 ## API for frontend
     @PostMapping("/LanguageTutor/{email}")
     public String LanguageTutor(@PathVariable String email, @RequestBody UserRequest request)
@@ -38,3 +63,14 @@ This project is a backend system for the AI education system, and uses Springboo
         public String model;
         public String session;
     }
+
+## Backend Development
+./gradlew build    # Build project
+./gradlew test     # Run tests
+
+## Contributing
+1. Fork the repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Create Pull Request
